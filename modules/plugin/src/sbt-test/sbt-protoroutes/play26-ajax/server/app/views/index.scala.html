@@ -1,0 +1,12 @@
+@()
+<html>
+<body>
+<div>2 + 3 = <span id="add-2-3"></span></div>
+<div>2 * 3 = <span id="mul-2-3"></span></div>
+@scalajs.html.scripts(
+  "client",
+  name => routes.Assets.at(name).toString,
+  name => getClass.getResource(s"/public/$name") != null
+)
+</body>
+</html>

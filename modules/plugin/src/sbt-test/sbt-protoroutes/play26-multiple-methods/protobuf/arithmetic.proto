@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package protoroutes.examples;
+
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+
+service Arithmetic {
+
+    rpc Add (Int32Pair) returns (google.protobuf.Int32Value) {
+        option (google.api.http) = {
+            post: "/api/arithmetic/add"
+        };
+    }
+
+    rpc Mul (Int32Pair) returns (google.protobuf.Int32Value) {
+        option (google.api.http) = {
+            put: "/api/arithmetic/mul"
+        };
+    }
+
+}
+
+message Int32Pair {
+
+    int32 x = 1;
+    int32 y = 2;
+
+}

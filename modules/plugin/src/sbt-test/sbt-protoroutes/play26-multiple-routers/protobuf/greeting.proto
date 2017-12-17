@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package protoroutes.examples;
+
+import "google/api/annotations.proto";
+
+service Greeting {
+
+    rpc Hello(HelloRequest) returns (HelloResponse) {
+        option (google.api.http) = {
+            post: "/api/greeting/hello"
+        };
+    }
+
+}
+
+message HelloRequest {
+
+    string name = 1;
+
+}
+
+message HelloResponse {
+
+    string message = 1;
+
+}
+
