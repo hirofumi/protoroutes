@@ -52,7 +52,7 @@ final class DotProto private (
             p.add(s"option ${k.getName} = $v;")
           case (p, (k, v)) if k.getName == "java_package" =>
             p.add(s"""option ${k.getName} = "protoroutes.shaded.$v";""")
-          case (p, (k, v))  =>
+          case (p, (k, v)) =>
             p.add(s"""option ${k.getName} = "$v";""")
         }).newline
       )
