@@ -1,0 +1,32 @@
+language: scala
+sudo: required # https://github.com/travis-ci/travis-ci/issues/8836#issuecomment-357441064
+dist: trusty
+jdk:
+  - oraclejdk8
+addons:
+  chrome: stable
+env:
+  - TASK=scalafmtCheck
+  - TASK=test:scalafmtCheck
+  - TASK=test
+  - TASK=plugin/scripted
+before_script:
+  - export CHROME_BIN=/usr/bin/google-chrome
+  - mkdir -p "$HOME/tmp/bin"
+  - pushd "$HOME/tmp"
+  - wget -c https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip
+  - unzip -d bin chromedriver_linux64.zip
+  - chmod +x bin/chromedriver
+  - popd
+  - export PATH="$HOME/tmp/bin:$PATH"
+  - npm install
+script:
+  - sbt $TASK
+before_cache:
+  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+  - find $HOME/.sbt -name "*.lock" -delete
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot
+    - node_modules
