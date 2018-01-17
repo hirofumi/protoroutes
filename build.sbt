@@ -1,4 +1,6 @@
 import org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv
+import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
+import xerial.sbt.Sonatype._
 
 lazy val protoroutes =
   project
@@ -9,6 +11,8 @@ lazy val protoroutes =
       `runtime-ajax`,
       `runtime-play26`
     )
+    .settings(settings ++ noPublish)
+    .settings(name := "protoroutes")
 
 lazy val generator =
   project
@@ -33,6 +37,7 @@ lazy val plugin =
       addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.13"),
       buildInfoPackage   := "protoroutes",
       moduleName         := "sbt-protoroutes",
+      name               := "sbt-protoroutes",
       sbtPlugin          := true,
       scriptedBufferLog  := false,
       scriptedLaunchOpts := scriptedLaunchOpts.value ++ Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
@@ -69,10 +74,29 @@ lazy val `runtime-play26` =
 
 lazy val settings: Seq[Def.Setting[_]] =
   Seq(
-    name         := s"protoroutes ${thisProject.value.id}",
-    organization := "com.github.hirofumi",
-    scalaVersion := "2.12.4"
+    name              := s"protoroutes ${thisProject.value.id}",
+    organization      := "com.github.hirofumi",
+    publishMavenStyle := true,
+    publishTo         := sonatypePublishTo.value,
+    scalaVersion      := "2.12.4"
   ) ++ Seq(
+    licenses := Seq(
+      "MIT" -> url("https://opensource.org/licenses/MIT")
+    ),
+    releaseProcess := Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      runTest,
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      releaseStepCommand("publishSigned"),
+      setNextVersion,
+      commitNextVersion,
+      releaseStepCommand("sonatypeReleaseAll"),
+      pushChanges
+    ),
     scalacOptions ++= Seq(
       "-deprecation",
       "-encoding", "UTF-8",
@@ -92,8 +116,18 @@ lazy val settings: Seq[Def.Setting[_]] =
     scalacOptions in (Compile, console) ++= Seq(
       "-Xlint:-unused"
     ),
+    sonatypeProjectHosting := Some(
+      GithubHosting("hirofumi", "protoroutes", "hirofummy@gmail.com")
+    ),
     testOptions ++= Seq(
       Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "2"),
       Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
     )
+  )
+
+lazy val noPublish: Seq[Def.Setting[_]] =
+  Seq(
+    publishArtifact := false,
+    publishLocal    := {},
+    publish         := {}
   )
