@@ -34,7 +34,7 @@ lazy val plugin =
     .enablePlugins(BuildInfoPlugin)
     .settings(settings)
     .settings(
-      addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.13"),
+      addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.14"),
       buildInfoPackage   := "protoroutes",
       moduleName         := "sbt-protoroutes",
       name               := "sbt-protoroutes",
