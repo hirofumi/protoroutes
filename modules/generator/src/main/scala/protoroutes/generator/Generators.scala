@@ -18,10 +18,10 @@ abstract class Generators {
   ): Seq[(JvmGenerator, Seq[String])] = {
     val target =
       scalapb.gen(
-        flatPackage        = params.flatPackage,
-        javaConversions    = params.javaConversions,
-        grpc               = params.grpc,
-        singleLineToString = params.singleLineToString
+        flatPackage             = params.flatPackage,
+        javaConversions         = params.javaConversions,
+        grpc                    = params.grpc,
+        singleLineToProtoString = params.singleLineToProtoString
       )
     Seq(newGenerator(params).toJvmGenerator -> target._2, target)
   }
