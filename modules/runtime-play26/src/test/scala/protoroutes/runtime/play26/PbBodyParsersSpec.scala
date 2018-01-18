@@ -20,7 +20,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.language.implicitConversions
 import scalapb.GeneratedMessageCompanion
-import scalapb.json4s.JsonFormat
+import scalapb_playjson.JsonFormat
 
 class PbBodyParsersSpec extends PlaySpec with GuiceOneAppPerSuite {
 

@@ -5,7 +5,7 @@ import play.api.mvc.{BodyParser, PlayBodyParsers, Results}
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
 import scalapb.GeneratedMessageCompanion
-import scalapb.json4s.JsonFormat
+import scalapb_playjson.JsonFormat
 
 @Singleton
 class PbBodyParsers @Inject()(parse: PlayBodyParsers) {

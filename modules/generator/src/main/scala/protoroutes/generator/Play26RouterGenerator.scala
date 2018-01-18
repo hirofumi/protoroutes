@@ -48,7 +48,7 @@ class Play26RouterGenerator(
           "import _root_.protoroutes.runtime.play26.PbBodyParsers",
           "import _root_.protoroutes.runtime.play26.PbFormat.requestToWriteable",
           "import _root_.scala.concurrent.ExecutionContext",
-          "import _root_.scalapb.json4s.JsonFormat"
+          "import _root_.scalapb_playjson.JsonFormat"
         )
         .newline
         .print(file.getServices.asScala)(generateRouterClass)

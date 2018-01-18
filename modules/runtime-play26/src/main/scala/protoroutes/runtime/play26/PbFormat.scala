@@ -4,7 +4,7 @@ import akka.util.ByteString
 import play.api.http.{MediaType, Writeable}
 import play.api.mvc.Request
 import scalapb.GeneratedMessageCompanion
-import scalapb.json4s.JsonFormat
+import scalapb_playjson.JsonFormat
 
 sealed abstract class PbFormat {
 

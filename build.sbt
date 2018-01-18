@@ -66,7 +66,7 @@ lazy val `runtime-play26` =
       libraryDependencies ++= Seq(
         "com.typesafe.play"      %% "play"                 % "2.6.10",
         "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % "0.7.0-rc7",
-        "com.thesamet.scalapb"   %% "scalapb-json4s"       % "0.7.0-rc1",
+        "io.github.scalapb-json" %% "scalapb-playjson"     % "0.7.0-M1",
         "org.scalatest"          %% "scalatest"            % "3.0.4" % Test,
         "org.scalatestplus.play" %% "scalatestplus-play"   % "3.1.2" % Test
       )
