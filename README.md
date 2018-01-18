@@ -35,3 +35,8 @@ Protoroutes is an sbt plugin which can generate the following from .proto file.
 ```
 
 The idea of protoroutes is based on [btlines/grpcgateway](https://github.com/btlines/grpcgateway).
+
+## Examples
+
+* [a fork](https://github.com/hirofumi/Full-Stack-Scala-Starter/tree/protoroutes) of [Full-Stack-Scala-Starter](https://github.com/Algomancer/Full-Stack-Scala-Starter)
+* [scripted tests](./modules/plugin/src/sbt-test/sbt-protoroutes)
