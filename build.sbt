@@ -22,7 +22,7 @@ lazy val generator =
     .settings(
       libraryDependencies ++= Seq(
         "com.google.api.grpc"  %  "proto-google-common-protos" % "1.0.3",
-        "com.thesamet.scalapb" %% "compilerplugin"             % "0.7.0-rc6"
+        "com.thesamet.scalapb" %% "compilerplugin"             % "0.7.0-rc7"
       )
     )
 
@@ -53,7 +53,7 @@ lazy val `runtime-ajax` =
     )
     .settings(
       libraryDependencies ++= Seq(
-        "com.thesamet.scalapb" %%% "scalapb-runtime" % "0.7.0-rc6",
+        "com.thesamet.scalapb" %%% "scalapb-runtime" % "0.7.0-rc7",
         "org.scala-js"         %%% "scalajs-dom"     % "0.9.4"
       )
     )
@@ -65,7 +65,7 @@ lazy val `runtime-play26` =
     .settings(
       libraryDependencies ++= Seq(
         "com.typesafe.play"      %% "play"                 % "2.6.10",
-        "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % "0.7.0-rc6",
+        "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % "0.7.0-rc7",
         "com.thesamet.scalapb"   %% "scalapb-json4s"       % "0.7.0-rc1",
         "org.scalatest"          %% "scalatest"            % "3.0.4" % Test,
         "org.scalatestplus.play" %% "scalatestplus-play"   % "3.1.2" % Test
