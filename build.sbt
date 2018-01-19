@@ -22,7 +22,11 @@ lazy val generator =
     .settings(
       libraryDependencies ++= Seq(
         "com.google.api.grpc"  %  "proto-google-common-protos" % "1.0.3",
-        "com.thesamet.scalapb" %% "compilerplugin"             % "0.7.0-rc7"
+        "com.lihaoyi"          %% "fastparse"                  % "1.0.0",
+        "com.thesamet.scalapb" %% "compilerplugin"             % V.scalaPb,
+        "com.thesamet.scalapb" %% "scalapb-runtime"            % V.scalaPb    % Test,
+        "org.scalacheck"       %% "scalacheck"                 % V.scalaCheck % Test,
+        "org.scalatest"        %% "scalatest"                  % V.scalaTest  % Test
       )
     )
 
@@ -59,7 +63,7 @@ lazy val `runtime-ajax` =
     )
     .settings(
       libraryDependencies ++= Seq(
-        "com.thesamet.scalapb" %%% "scalapb-runtime" % "0.7.0-rc7",
+        "com.thesamet.scalapb" %%% "scalapb-runtime" % V.scalaPb,
         "org.scala-js"         %%% "scalajs-dom"     % "0.9.4"
       )
     )
@@ -71,10 +75,10 @@ lazy val `runtime-play26` =
     .settings(
       libraryDependencies ++= Seq(
         "com.typesafe.play"      %% "play"                 % "2.6.10",
-        "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % "0.7.0-rc7",
+        "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % V.scalaPb,
         "io.github.scalapb-json" %% "scalapb-playjson"     % "0.7.0-M1",
-        "org.scalatest"          %% "scalatest"            % "3.0.4" % Test,
-        "org.scalatestplus.play" %% "scalatestplus-play"   % "3.1.2" % Test
+        "org.scalatest"          %% "scalatest"            % V.scalaTest % Test,
+        "org.scalatestplus.play" %% "scalatestplus-play"   % "3.1.2"     % Test
       )
     )
 
@@ -137,6 +141,12 @@ lazy val noPublish: Seq[Def.Setting[_]] =
     publishLocal    := {},
     publish         := {}
   )
+
+lazy val V = new {
+  val scalaCheck = "1.13.5"
+  val scalaPb    = "0.7.0-rc7"
+  val scalaTest  = "3.0.4"
+}
 
 addCommandAlias(
   "validate",
