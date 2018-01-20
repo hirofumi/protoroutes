@@ -35,12 +35,12 @@ lazy val plugin =
     .settings(settings)
     .settings(
       addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.14"),
-      buildInfoPackage   := "protoroutes",
-      moduleName         := "sbt-protoroutes",
-      name               := "sbt-protoroutes",
-      sbtPlugin          := true,
-      scriptedBufferLog  := false,
-      scriptedLaunchOpts := scriptedLaunchOpts.value ++ Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
+      buildInfoPackage    := "protoroutes",
+      moduleName          := "sbt-protoroutes",
+      name                := "sbt-protoroutes",
+      sbtPlugin           := true,
+      scriptedBufferLog   := false,
+      scriptedLaunchOpts ++= Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
     )
 
 lazy val `runtime-ajax` =
@@ -131,3 +131,13 @@ lazy val noPublish: Seq[Def.Setting[_]] =
     publishLocal    := {},
     publish         := {}
   )
+
+addCommandAlias(
+  "validate",
+  Seq(
+    "scalafmtCheck",
+    "test:scalafmtCheck",
+    "test",
+    "plugin/scripted"
+  ).mkString(";", ";", "")
+)
