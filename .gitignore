@@ -1,4 +1,5 @@
 .idea/
+.sbt-scripted/
 node_modules/
 target/
 

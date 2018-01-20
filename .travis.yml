@@ -24,4 +24,5 @@ cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot
+    - .sbt-scripted
     - node_modules
