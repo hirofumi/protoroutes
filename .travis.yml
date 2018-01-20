@@ -5,11 +5,6 @@ jdk:
   - oraclejdk8
 addons:
   chrome: stable
-env:
-  - TASK=scalafmtCheck
-  - TASK=test:scalafmtCheck
-  - TASK=test
-  - TASK=plugin/scripted
 before_script:
   - export CHROME_BIN=/usr/bin/google-chrome
   - mkdir -p "$HOME/tmp/bin"
@@ -21,7 +16,7 @@ before_script:
   - export PATH="$HOME/tmp/bin:$PATH"
   - npm install
 script:
-  - sbt $TASK
+  - sbt validate
 before_cache:
   - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
   - find $HOME/.sbt -name "*.lock" -delete
@@ -29,4 +24,5 @@ cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot
+    - .sbt-scripted
     - node_modules

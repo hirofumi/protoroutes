@@ -35,12 +35,18 @@ lazy val plugin =
     .settings(settings)
     .settings(
       addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.14"),
-      buildInfoPackage   := "protoroutes",
-      moduleName         := "sbt-protoroutes",
-      name               := "sbt-protoroutes",
-      sbtPlugin          := true,
-      scriptedBufferLog  := false,
-      scriptedLaunchOpts := scriptedLaunchOpts.value ++ Seq("-Xmx1024M", "-Dplugin.version=" + version.value)
+      buildInfoPackage    := "protoroutes",
+      moduleName          := "sbt-protoroutes",
+      name                := "sbt-protoroutes",
+      sbtPlugin           := true,
+      scriptedBufferLog   := false,
+      scriptedLaunchOpts ++= Seq("-Xmx1024M", s"-Dplugin.version=${version.value}")
+    )
+    .settings(
+      // Workaround for sbt/sbt#3469
+      // see also: https://github.com/dotty-staging/dotty/commit/627826444eacb7b8e42696b693bf3a6c0c28d8f9
+      scriptedLaunchOpts +=
+        s"-Dsbt.boot.directory=${((baseDirectory in ThisBuild).value / ".sbt-scripted").getAbsolutePath}"
     )
 
 lazy val `runtime-ajax` =
@@ -131,3 +137,13 @@ lazy val noPublish: Seq[Def.Setting[_]] =
     publishLocal    := {},
     publish         := {}
   )
+
+addCommandAlias(
+  "validate",
+  Seq(
+    "scalafmtCheck",
+    "test:scalafmtCheck",
+    "test",
+    "plugin/scripted"
+  ).mkString(";", ";", "")
+)
