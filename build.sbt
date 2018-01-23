@@ -21,7 +21,7 @@ lazy val generator =
     .settings(settings)
     .settings(
       libraryDependencies ++= Seq(
-        "com.google.api.grpc"  %  "proto-google-common-protos" % "1.0.3",
+        "com.google.api.grpc"  %  "proto-google-common-protos" % "1.0.4",
         "com.thesamet.scalapb" %% "compilerplugin"             % "0.7.0-rc7"
       )
     )
@@ -70,9 +70,9 @@ lazy val `runtime-play26` =
     .settings(settings)
     .settings(
       libraryDependencies ++= Seq(
-        "com.typesafe.play"      %% "play"                 % "2.6.10",
+        "com.typesafe.play"      %% "play"                 % "2.6.11",
         "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % "0.7.0-rc7",
-        "io.github.scalapb-json" %% "scalapb-playjson"     % "0.7.0-M1",
+        "io.github.scalapb-json" %% "scalapb-playjson"     % "0.7.0-M2",
         "org.scalatest"          %% "scalatest"            % "3.0.4" % Test,
         "org.scalatestplus.play" %% "scalatestplus-play"   % "3.1.2" % Test
       )
