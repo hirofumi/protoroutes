@@ -24,7 +24,7 @@ lazy val generator =
         "com.google.api.grpc"  %  "proto-google-common-protos" % "1.0.3",
         "com.lihaoyi"          %% "fastparse"                  % "1.0.0",
         "com.thesamet.scalapb" %% "compilerplugin"             % V.scalaPb,
-        "com.thesamet.scalapb" %% "scalapb-runtime"            % V.scalaPb    % Test,
+        "com.thesamet.scalapb" %% "scalapb-runtime"            % V.scalaPb,
         "org.scalacheck"       %% "scalacheck"                 % V.scalaCheck % Test,
         "org.scalatest"        %% "scalatest"                  % V.scalaTest  % Test
       )
