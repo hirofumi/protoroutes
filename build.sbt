@@ -21,8 +21,8 @@ lazy val generator =
     .settings(settings)
     .settings(
       libraryDependencies ++= Seq(
-        "com.google.api.grpc"  %  "proto-google-common-protos" % "1.0.4",
-        "com.thesamet.scalapb" %% "compilerplugin"             % "0.7.0-rc7"
+        "com.google.api.grpc"  %  "proto-google-common-protos" % "1.1.0",
+        "com.thesamet.scalapb" %% "compilerplugin"             % "0.7.0"
       )
     )
 
@@ -34,7 +34,7 @@ lazy val plugin =
     .enablePlugins(BuildInfoPlugin)
     .settings(settings)
     .settings(
-      addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.14"),
+      addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.17"),
       buildInfoPackage    := "protoroutes",
       moduleName          := "sbt-protoroutes",
       name                := "sbt-protoroutes",
@@ -59,7 +59,7 @@ lazy val `runtime-ajax` =
     )
     .settings(
       libraryDependencies ++= Seq(
-        "com.thesamet.scalapb" %%% "scalapb-runtime" % "0.7.0-rc7",
+        "com.thesamet.scalapb" %%% "scalapb-runtime" % "0.7.0",
         "org.scala-js"         %%% "scalajs-dom"     % "0.9.4"
       )
     )
@@ -71,9 +71,9 @@ lazy val `runtime-play26` =
     .settings(
       libraryDependencies ++= Seq(
         "com.typesafe.play"      %% "play"                 % "2.6.11",
-        "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % "0.7.0-rc7",
-        "io.github.scalapb-json" %% "scalapb-playjson"     % "0.7.0-M2",
-        "org.scalatest"          %% "scalatest"            % "3.0.4" % Test,
+        "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % "0.7.0",
+        "io.github.scalapb-json" %% "scalapb-playjson"     % "0.7.0",
+        "org.scalatest"          %% "scalatest"            % "3.0.5" % Test,
         "org.scalatestplus.play" %% "scalatestplus-play"   % "3.1.2" % Test
       )
     )

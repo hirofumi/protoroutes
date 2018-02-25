@@ -20,7 +20,7 @@ lazy val server =
       libraryDependencies ++= Seq(
         guice,
         "com.vmunier"            %% "scalajs-scripts"    % "1.1.1",
-        "org.scalatest"          %% "scalatest"          % "3.0.4" % Test,
+        "org.scalatest"          %% "scalatest"          % "3.0.5" % Test,
         "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
       )
     )
