@@ -13,7 +13,7 @@ class TemplateSuite
     implicit val arbitraryTemplate: Arbitrary[Template] =
       TemplateGen.arbitrary[DescriptorProto]
     forAll("template") { template: Template =>
-      val parsed = Template.parse(template.text)
+      val parsed = TemplateParsers.parseTemplate[DescriptorProto](template.text)
       assert(parsed === Right(template))
     }
   }

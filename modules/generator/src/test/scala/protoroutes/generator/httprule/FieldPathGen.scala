@@ -2,18 +2,25 @@ package protoroutes.generator.httprule
 
 import org.scalacheck.Gen
 import scalapb.GeneratedMessageCompanion
-import scalapb.descriptors.Descriptor
 
 object FieldPathGen {
 
   def apply[A <: scalapb.GeneratedMessage with scalapb.Message[A]](
     implicit A: GeneratedMessageCompanion[A]
-  ): Gen[FieldPath] =
-    fromDescriptor(A.scalaDescriptor)
+  ): Gen[FieldPath] = {
 
-  def fromDescriptor(descriptor: Descriptor): Gen[FieldPath] =
+//    A.defaultInstance.toPMessage.value
+
+//    println(A.nestedMessagesCompanions.map(_.scalaDescriptor.nestedMessages))
+//    println( A.scalaDescriptor.fields.map(_.asProto .`type`.map(_.isTypeMessage)))
+
     Gen.oneOf(
-      descriptor.fields.map(_.name).map(FieldPath(_, Nil))
+      A.scalaDescriptor.fields
+        .map({ field =>
+          FieldPath(field.name, Nil)
+        })
     )
+
+  }
 
 }
