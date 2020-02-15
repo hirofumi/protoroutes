@@ -7,7 +7,6 @@ import com.google.protobuf.DescriptorProtos.{
   FieldDescriptorProto,
   FileDescriptorProto
 }
-import protoroutes.generator.FunctionalPrinterPimps._
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
 import scala.util.matching.Regex

@@ -13,17 +13,24 @@ import com.google.protobuf.compiler.PluginProtos.{
 }
 import scala.collection.JavaConverters._
 import scalapb.compiler.FunctionalPrinter.PrinterEndo
-import scalapb.compiler.{FunctionalPrinter, GeneratorParams}
+import scalapb.compiler.{
+  DescriptorImplicits,
+  FunctionalPrinter,
+  GeneratorParams
+}
 
-class Play26RouterGenerator(
-  val params: GeneratorParams
-) extends ProtoroutesGenerator {
+class Play26RouterGenerator(params: GeneratorParams)
+  extends ProtoroutesGenerator {
 
   protected[this] def handleCodeGeneratorRequest(
     request: CodeGeneratorRequest
   ): CodeGeneratorResponse = {
+    val nameToFile = buildFileDescriptorsFrom(request)
+    implicit val implicits: DescriptorImplicits =
+      new DescriptorImplicits(params, nameToFile.values.toVector)
     val builder = CodeGeneratorResponse.newBuilder()
-    buildFileDescriptorsFrom(request)
+    request.getFileToGenerateList.asScala
+      .map(nameToFile)
       .filter(hasServiceWithWebApiMethod)
       .map(generateRouterSourceFile)
       .foreach(builder.addFile)
@@ -32,7 +39,8 @@ class Play26RouterGenerator(
 
   private[this] def generateRouterSourceFile(
     file: FileDescriptor
-  ): CodeGeneratorResponse.File = {
+  )(implicit implicits: DescriptorImplicits): CodeGeneratorResponse.File = {
+    import implicits._
     val builder    = CodeGeneratorResponse.File.newBuilder()
     val objectName = getObjectNameWithoutSuffix(file)
     builder.setName(s"${file.scalaDirectory}/${objectName}Router.scala")
@@ -59,7 +67,8 @@ class Play26RouterGenerator(
   private[this] def generateRouterClass(
     printer: FunctionalPrinter,
     service: ServiceDescriptor
-  ): FunctionalPrinter =
+  )(implicit implicits: DescriptorImplicits): FunctionalPrinter = {
+    import implicits._
     printer
       .add(s"class ${service.name}Router @Inject() (")
       .addIndented(
@@ -83,14 +92,17 @@ class Play26RouterGenerator(
       .newline
       .add("}")
       .newline
+  }
 
   private[this] def generateRoute(
     printer: FunctionalPrinter,
     method: MethodDescriptor
-  ): FunctionalPrinter = {
+  )(implicit implicits: DescriptorImplicits): FunctionalPrinter = {
+    import implicits._
     val http = method.getOptions.getExtension(AnnotationsProto.http)
+    val in   = method.inputType.scalaType
     def actionForRequestBody: PrinterEndo =
-      _.add(s"action.async(parse[${method.scalaIn}]) { implicit request =>")
+      _.add(s"action.async(parse[${in}]) { implicit request =>")
         .addIndented(s"impl.${method.name}(request.body).map(Results.Ok(_))")
         .add("}")
     http.getPatternCase match {

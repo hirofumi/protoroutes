@@ -2,7 +2,7 @@ import org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import xerial.sbt.Sonatype._
 
-val verScalaPB = "0.7.4"
+val verScalaPB = "0.9.6"
 
 lazy val protoroutes =
   project
@@ -23,7 +23,7 @@ lazy val generator =
     .settings(settings)
     .settings(
       libraryDependencies ++= Seq(
-        "com.google.api.grpc"  %  "proto-google-common-protos" % "1.1.1",
+        "com.google.api.grpc"  %  "proto-google-common-protos" % "1.17.0",
         "com.thesamet.scalapb" %% "compilerplugin"             % verScalaPB
       )
     )
@@ -86,7 +86,7 @@ lazy val `runtime-play26` =
       libraryDependencies ++= Seq(
         "com.typesafe.play"      %% "play"                 % "2.6.25",
         "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % verScalaPB,
-        "io.github.scalapb-json" %% "scalapb-playjson"     % "0.7.2",
+        "io.github.scalapb-json" %% "scalapb-playjson"     % "0.9.1",
         "org.scalatest"          %% "scalatest"            % "3.0.8" % Test,
         "org.scalatestplus.play" %% "scalatestplus-play"   % "3.1.3" % Test
       )

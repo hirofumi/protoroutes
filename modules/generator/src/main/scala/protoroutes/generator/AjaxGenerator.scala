@@ -13,17 +13,23 @@ import com.google.protobuf.compiler.PluginProtos.{
 }
 import scala.collection.JavaConverters._
 import scalapb.compiler.FunctionalPrinter.PrinterEndo
-import scalapb.compiler.{FunctionalPrinter, GeneratorParams}
+import scalapb.compiler.{
+  DescriptorImplicits,
+  FunctionalPrinter,
+  GeneratorParams
+}
 
-class AjaxGenerator(
-  val params: GeneratorParams
-) extends ProtoroutesGenerator {
+class AjaxGenerator(params: GeneratorParams) extends ProtoroutesGenerator {
 
   protected[this] def handleCodeGeneratorRequest(
     request: CodeGeneratorRequest
   ): CodeGeneratorResponse = {
+    val nameToFile = buildFileDescriptorsFrom(request)
+    implicit val implicits: DescriptorImplicits =
+      new DescriptorImplicits(params, nameToFile.values.toVector)
     val builder = CodeGeneratorResponse.newBuilder()
-    buildFileDescriptorsFrom(request)
+    request.getFileToGenerateList.asScala
+      .map(nameToFile)
       .filter(hasServiceWithWebApiMethod)
       .map(generateAjaxSourceFile)
       .foreach(builder.addFile)
@@ -32,7 +38,8 @@ class AjaxGenerator(
 
   private[this] def generateAjaxSourceFile(
     file: FileDescriptor
-  ): CodeGeneratorResponse.File = {
+  )(implicit implicits: DescriptorImplicits): CodeGeneratorResponse.File = {
+    import implicits._
     val builder    = CodeGeneratorResponse.File.newBuilder()
     val objectName = getObjectNameWithoutSuffix(file)
     builder.setName(s"${file.scalaDirectory}/${objectName}Ajax.scala")
@@ -53,7 +60,8 @@ class AjaxGenerator(
   private[this] def generateAjaxClass(
     printer: FunctionalPrinter,
     service: ServiceDescriptor
-  ): FunctionalPrinter = {
+  )(implicit implicits: DescriptorImplicits): FunctionalPrinter = {
+    import implicits._
     val methods = getWebApiMethods(service)
     val name    = s"${service.getName}Ajax"
     printer
@@ -61,30 +69,36 @@ class AjaxGenerator(
         s"""final case class $name(baseUrl: String = "", timeout: Int = 0, headers: Map[String, String] = Map.empty, withCredentials: Boolean = false) {"""
       )
       .indented(_.print(methods)({ (p, m) =>
-        p.add(
-            s"val ${m.name}: PbAjax[_root_.${m.scalaIn}, _root_.${m.scalaOut}] ="
-          )
+        p.add(s"val ${m.name}: ${pbAjaxType(m)} =")
           .indented(_.call(generateAjaxCall(m)))
       }))
       .add("}")
       .newline
   }
 
-  private[this] def generateAjaxCall(method: MethodDescriptor): PrinterEndo = {
-    printer =>
-      val http = method.getOptions.getExtension(AnnotationsProto.http)
-      http.getPatternCase match {
-        case PatternCase.POST =>
-          printer.add(
-            s"""new PbAjax[_root_.${method.scalaIn}, _root_.${method.scalaOut}]("POST", baseUrl + "${http.getPost}", timeout, headers, withCredentials)"""
-          )
-        case PatternCase.PUT =>
-          printer.add(
-            s"""new PbAjax[_root_.${method.scalaIn}, _root_.${method.scalaOut}]("PUT", baseUrl + "${http.getPut}", timeout, headers, withCredentials)"""
-          )
-        case _ =>
-          printer
-      }
+  private[this] def generateAjaxCall(
+    method: MethodDescriptor
+  )(implicit implicits: DescriptorImplicits): PrinterEndo = { printer =>
+    val http = method.getOptions.getExtension(AnnotationsProto.http)
+    http.getPatternCase match {
+      case PatternCase.POST =>
+        printer.add(
+          s"""new ${pbAjaxType(method)}("POST", baseUrl + "${http.getPost}", timeout, headers, withCredentials)"""
+        )
+      case PatternCase.PUT =>
+        printer.add(
+          s"""new ${pbAjaxType(method)}("PUT", baseUrl + "${http.getPut}", timeout, headers, withCredentials)"""
+        )
+      case _ =>
+        printer
+    }
+  }
+
+  private[this] def pbAjaxType(
+    method: MethodDescriptor
+  )(implicit implicits: DescriptorImplicits): String = {
+    import implicits._
+    s"PbAjax[${method.inputType.scalaType}, ${method.outputType.scalaType}]"
   }
 
 }
