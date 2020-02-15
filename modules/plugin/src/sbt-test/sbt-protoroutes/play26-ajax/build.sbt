@@ -19,9 +19,9 @@ lazy val server =
     .settings(
       libraryDependencies ++= Seq(
         guice,
-        "com.vmunier"            %% "scalajs-scripts"    % "1.1.1",
-        "org.scalatest"          %% "scalatest"          % "3.0.5" % Test,
-        "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
+        "com.vmunier"            %% "scalajs-scripts"    % "1.1.4",
+        "org.scalatest"          %% "scalatest"          % "3.0.8" % Test,
+        "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % Test
       )
     )
 
@@ -29,5 +29,5 @@ lazy val commonSettings =
   Seq(
     PB.protoSources in Compile := Seq(baseDirectory.value.getParentFile / "protobuf"),
     PB.protoSources in Compile += protoroutesDependencyProtoPath.value,
-    scalaVersion               := "2.12.4"
+    scalaVersion               := "2.12.10"
   )

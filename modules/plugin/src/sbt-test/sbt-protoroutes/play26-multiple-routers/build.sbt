@@ -1,9 +1,9 @@
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.10"
 
 libraryDependencies ++= Seq(
   guice,
-  "org.scalatest"          %% "scalatest"          % "3.0.5" % Test,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
+  "org.scalatest"          %% "scalatest"          % "3.0.8" % Test,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % Test
 )
 
 scalaSource in Test := baseDirectory.value / "tests"

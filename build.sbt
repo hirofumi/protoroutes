@@ -2,6 +2,8 @@ import org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import xerial.sbt.Sonatype._
 
+val verScalaPB = "0.7.4"
+
 lazy val protoroutes =
   project
     .in(file("."))
@@ -21,9 +23,15 @@ lazy val generator =
     .settings(settings)
     .settings(
       libraryDependencies ++= Seq(
-        "com.google.api.grpc"  %  "proto-google-common-protos" % "1.1.0",
-        "com.thesamet.scalapb" %% "compilerplugin"             % "0.7.0"
+        "com.google.api.grpc"  %  "proto-google-common-protos" % "1.1.1",
+        "com.thesamet.scalapb" %% "compilerplugin"             % verScalaPB
       )
+    )
+    .settings(
+      // Workaround for sbt/sbt#3248
+      // see also: https://github.com/sbt/sbt/issues/3248
+      publishLocal :=
+        publishLocal.dependsOn(publishLocal in `runtime-ajax`, publishLocal in `runtime-play26`).value,
     )
 
 lazy val plugin =
@@ -31,10 +39,10 @@ lazy val plugin =
     .in(file("modules/plugin"))
     .aggregate(generator)
     .dependsOn(generator)
-    .enablePlugins(BuildInfoPlugin)
+    .enablePlugins(BuildInfoPlugin, SbtPlugin)
     .settings(settings)
     .settings(
-      addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.17"),
+      addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.27"),
       buildInfoPackage    := "protoroutes",
       moduleName          := "sbt-protoroutes",
       name                := "sbt-protoroutes",
@@ -48,6 +56,12 @@ lazy val plugin =
       scriptedLaunchOpts +=
         s"-Dsbt.boot.directory=${((baseDirectory in ThisBuild).value / ".sbt-scripted").getAbsolutePath}"
     )
+    .settings(
+      // Workaround for sbt/sbt#3248
+      // see also: https://github.com/sbt/sbt/issues/3248
+      publishLocal :=
+        publishLocal.dependsOn(publishLocal in generator).value,
+    )
 
 lazy val `runtime-ajax` =
   project
@@ -59,8 +73,8 @@ lazy val `runtime-ajax` =
     )
     .settings(
       libraryDependencies ++= Seq(
-        "com.thesamet.scalapb" %%% "scalapb-runtime" % "0.7.0",
-        "org.scala-js"         %%% "scalajs-dom"     % "0.9.4"
+        "com.thesamet.scalapb" %%% "scalapb-runtime" % verScalaPB,
+        "org.scala-js"         %%% "scalajs-dom"     % "0.9.8"
       )
     )
 
@@ -70,11 +84,11 @@ lazy val `runtime-play26` =
     .settings(settings)
     .settings(
       libraryDependencies ++= Seq(
-        "com.typesafe.play"      %% "play"                 % "2.6.11",
-        "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % "0.7.0",
-        "io.github.scalapb-json" %% "scalapb-playjson"     % "0.7.0",
-        "org.scalatest"          %% "scalatest"            % "3.0.5" % Test,
-        "org.scalatestplus.play" %% "scalatestplus-play"   % "3.1.2" % Test
+        "com.typesafe.play"      %% "play"                 % "2.6.25",
+        "com.thesamet.scalapb"   %% "scalapb-runtime-grpc" % verScalaPB,
+        "io.github.scalapb-json" %% "scalapb-playjson"     % "0.7.2",
+        "org.scalatest"          %% "scalatest"            % "3.0.8" % Test,
+        "org.scalatestplus.play" %% "scalatestplus-play"   % "3.1.3" % Test
       )
     )
 
@@ -84,7 +98,7 @@ lazy val settings: Seq[Def.Setting[_]] =
     organization      := "com.github.hirofumi",
     publishMavenStyle := true,
     publishTo         := sonatypePublishTo.value,
-    scalaVersion      := "2.12.4"
+    scalaVersion      := "2.12.10"
   ) ++ Seq(
     licenses := Seq(
       "MIT" -> url("https://opensource.org/licenses/MIT")

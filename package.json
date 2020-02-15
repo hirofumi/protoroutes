@@ -1,6 +1,6 @@
 {
   "name": "protoroutes",
   "devDependencies": {
-    "jsdom": "^11.5.1"
+    "jsdom": "^16.1.0"
   }
 }
