@@ -18,10 +18,12 @@ before_script:
 script:
   - sbt validate
 before_cache:
+  - find $HOME/.coursier/cache -name "*.lock" -type f -delete
   - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
   - find $HOME/.sbt -name "*.lock" -delete
 cache:
   directories:
+    - $HOME/.coursier
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot
     - .sbt-scripted
